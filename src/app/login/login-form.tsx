@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { AuthLayout } from "@/components/layout/auth-layout";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -19,23 +19,34 @@ function loginErrorMessage(error: string | null) {
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
-  const error = loginErrorMessage(searchParams.get("error"));
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
+  const urlError = loginErrorMessage(searchParams.get("error"));
+  const [error, setError] = useState<string | null>(urlError);
+  const [pending, setPending] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/auth/csrf")
-      .then((res) => res.json())
-      .then((data: { csrfToken: string }) => {
-        if (!cancelled) setCsrfToken(data.csrfToken);
-      })
-      .catch(() => {
-        if (!cancelled) setCsrfToken("");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setPending(true);
+    setError(null);
+
+    const form = new FormData(event.currentTarget);
+    const email = String(form.get("email") ?? "");
+    const password = String(form.get("password") ?? "");
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      callbackUrl,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      setError("Invalid email or password");
+      setPending(false);
+      return;
+    }
+
+    window.location.href = callbackUrl;
+  }
 
   return (
     <AuthLayout
@@ -50,52 +61,42 @@ export function LoginForm() {
         </>
       }
     >
-      {csrfToken === null ? (
-        <p className="text-sm text-muted">Loading…</p>
-      ) : csrfToken === "" ? (
-        <p className="text-sm text-red-600" role="alert">
-          Could not start sign-in. Refresh the page and try again.
-        </p>
-      ) : (
-        <form
-          action="/api/auth/callback/credentials"
-          method="POST"
-          className="space-y-4"
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            defaultValue="demo@demo.com"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            required
+            autoComplete="current-password"
+            defaultValue="demo1234"
+          />
+        </div>
+        {error && (
+          <p className="text-sm text-red-600" role="alert">
+            {error}
+          </p>
+        )}
+        <button
+          type="submit"
+          disabled={pending}
+          className="inline-flex h-10 w-full items-center justify-center rounded-lg bg-brand px-4 text-sm font-medium text-white shadow-sm transition-all hover:bg-brand-hover disabled:opacity-50"
         >
-          <input type="hidden" name="csrfToken" value={csrfToken} />
-          <input type="hidden" name="callbackUrl" value={callbackUrl} />
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              required
-              autoComplete="email"
-              defaultValue="demo@demo.com"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              defaultValue="demo1234"
-            />
-          </div>
-          {error && (
-            <p className="text-sm text-red-600" role="alert">
-              {error}
-            </p>
-          )}
-          <Button type="submit" className="w-full">
-            Sign in
-          </Button>
-        </form>
-      )}
+          {pending ? "Signing in…" : "Sign in"}
+        </button>
+      </form>
     </AuthLayout>
   );
 }

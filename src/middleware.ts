@@ -12,6 +12,14 @@ const protectedPrefixes = [
   "/settings",
 ];
 
+function usesSecureCookies(request: NextRequest) {
+  if (process.env.NODE_ENV === "production") return true;
+  return (
+    request.nextUrl.protocol === "https:" ||
+    request.headers.get("x-forwarded-proto") === "https"
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtected = protectedPrefixes.some(
@@ -25,7 +33,7 @@ export async function middleware(request: NextRequest) {
     secret:
       process.env.AUTH_SECRET ??
       process.env.NEXTAUTH_SECRET,
-    secureCookie: request.nextUrl.protocol === "https:",
+    secureCookie: usesSecureCookies(request),
   });
 
   if (!token?.sub) {
