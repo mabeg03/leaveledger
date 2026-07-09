@@ -2,7 +2,7 @@
 
 > PTO requests, approvals, and balance tracking for small teams — no spreadsheets required.
 
-**Live demo →** Run locally or deploy to Vercel (see below)
+**Live demo →** https://leaveledger.vercel.app/
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -26,9 +26,6 @@ Next.js 16 · TypeScript · SQLite/PostgreSQL (Prisma) · Tailwind CSS · Auth.j
 ## Quick Start
 
 ```bash
-git clone <your-repo-url> && cd leaveledger
-cp .env.example .env
-npm install
 npm run db:push && npm run db:seed
 npm run dev   # http://localhost:3000
 ```
@@ -41,15 +38,6 @@ npm run dev   # http://localhost:3000
 | manager@demo.com | demo1234 | Manager |
 | admin@demo.com | demo1234 | Admin |
 
-## Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| `DATABASE_URL` | SQLite `file:./dev.db` locally; PostgreSQL URL in production |
-| `AUTH_SECRET` | Session signing secret (`openssl rand -base64 32`) |
-| `NEXTAUTH_URL` | App URL (`http://localhost:3000` locally) |
-| `AUTH_GOOGLE_ID` | Optional Google OAuth client ID |
-| `AUTH_GOOGLE_SECRET` | Optional Google OAuth secret |
 
 ## Architecture
 
