@@ -6,6 +6,14 @@ import { db } from "@/lib/db";
 import { loginSchema } from "@/lib/validators/auth";
 import type { Role } from "@prisma/client";
 
+const authSecret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+
+if (process.env.NODE_ENV === "production" && !authSecret) {
+  throw new Error(
+    "AUTH_SECRET is missing. Add it under Vercel → Settings → Environment Variables, then redeploy.",
+  );
+}
+
 declare module "next-auth" {
   interface Session {
     user: {
@@ -29,6 +37,7 @@ declare module "@auth/core/jwt" {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: authSecret,
   trustHost: true,
   session: { strategy: "jwt" },
   pages: {
