@@ -25,6 +25,7 @@ export async function middleware(request: NextRequest) {
     secret:
       process.env.AUTH_SECRET ??
       process.env.NEXTAUTH_SECRET,
+    secureCookie: request.nextUrl.protocol === "https:",
   });
 
   if (!token?.sub) {
