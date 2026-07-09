@@ -7,7 +7,7 @@ import {
   Shield,
   Users,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "LeaveLedger — PTO requests & approvals for small teams",
@@ -45,12 +45,12 @@ export default function LandingPage() {
             <span className="font-semibold">LeaveLedger</span>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/login">
-              <Button variant="ghost">Sign in</Button>
-            </Link>
-            <Link href="/signup">
-              <Button>Get started</Button>
-            </Link>
+            <ButtonLink href="/login" variant="ghost">
+              Sign in
+            </ButtonLink>
+            <ButtonLink href="/signup">
+              Get started
+            </ButtonLink>
           </div>
         </div>
       </header>
@@ -72,16 +72,12 @@ export default function LandingPage() {
                 so HR isn&apos;t stuck in email threads.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/login">
-                  <Button size="lg">
-                    Try the demo <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link href="/signup">
-                  <Button size="lg" variant="outline">
-                    Create account
-                  </Button>
-                </Link>
+              <ButtonLink href="/login" size="lg">
+                Try the demo <ArrowRight className="h-4 w-4" />
+              </ButtonLink>
+              <ButtonLink href="/signup" size="lg" variant="outline">
+                Create account
+              </ButtonLink>
               </div>
               <p className="mt-4 text-sm text-muted">
                 Demo login: <code className="rounded bg-brand-muted px-1.5 py-0.5 text-brand">demo@demo.com</code> / demo1234

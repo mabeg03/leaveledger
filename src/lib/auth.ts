@@ -37,6 +37,7 @@ declare module "@auth/core/jwt" {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  basePath: "/api/auth",
   secret: authSecret,
   trustHost: true,
   session: { strategy: "jwt" },

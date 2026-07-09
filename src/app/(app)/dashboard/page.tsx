@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { BalanceCard, StatCard } from "@/components/shared/balance-card";
 import { Avatar } from "@/components/shared/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
 
@@ -21,9 +21,7 @@ export default async function DashboardPage() {
         title={`Good ${getGreeting()}, ${user.name.split(" ")[0]}`}
         description="Here's what's happening with your time off."
         action={
-          <Link href="/requests/new">
-            <Button>New request</Button>
-          </Link>
+          <ButtonLink href="/requests/new">New request</ButtonLink>
         }
       />
 

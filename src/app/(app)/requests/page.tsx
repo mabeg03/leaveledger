@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { getLeaveRequests, getLeaveTypes } from "@/server/queries/leave";
 import { PageHeader } from "@/components/shared/page-header";
 import { RequestList } from "@/components/requests/request-list";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 
 export default async function RequestsPage({
   searchParams,
@@ -31,9 +30,7 @@ export default async function RequestsPage({
         title="Requests"
         description="All time-off requests you can see"
         action={
-          <Link href="/requests/new">
-            <Button>New request</Button>
-          </Link>
+          <ButtonLink href="/requests/new">New request</ButtonLink>
         }
       />
       <RequestList requests={items} leaveTypes={leaveTypes} nextCursor={nextCursor} filters={filters} />

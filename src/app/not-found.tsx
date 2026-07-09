@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
@@ -7,9 +6,7 @@ export default function NotFound() {
       <p className="text-6xl font-semibold text-brand">404</p>
       <h1 className="text-xl font-medium">Page not found</h1>
       <p className="text-sm text-muted">That route doesn&apos;t exist or was moved.</p>
-      <Link href="/">
-        <Button>Back home</Button>
-      </Link>
+      <ButtonLink href="/">Back home</ButtonLink>
     </div>
   );
 }

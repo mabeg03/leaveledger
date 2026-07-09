@@ -1,6 +1,5 @@
-import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 
 export function EmptyState({
   title,
@@ -23,9 +22,9 @@ export function EmptyState({
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="mt-2 max-w-sm text-sm text-muted">{description}</p>
       {action && (
-        <Link href={action.href} className="mt-6">
-          <Button>{action.label}</Button>
-        </Link>
+        <ButtonLink href={action.href} className="mt-6">
+          {action.label}
+        </ButtonLink>
       )}
     </div>
   );
